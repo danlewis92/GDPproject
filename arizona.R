@@ -171,11 +171,11 @@ predictions <- fifty
 
 for (i in 1:20) {
 new_level <- as.numeric(predictions[-1])
-new_lags <- as.numeric(predictions[-M])
+new_lags <- as.numeric(predictions[-(M+i-1)])
 
 newrates<- (new_level - new_lags)/new_lags
 new_rate_level <- newrates[-1]
-new_rate_lags <- newrates[-M+i]
+new_rate_lags <- newrates[-(M+i-1)]
 
 # estimate the AR(4) model 
 AR4 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) +  L(ts(new_rate_level),3) + L(ts(new_rate_level),4))
@@ -183,8 +183,8 @@ AR4 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2
 forecast <- c("Quarter in question" = coef(AR4) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6]))
 # compute AR(4) forecast error 
 forecast
-forecast*predictions[M] + predictions[M]
-predictions[M+i] <- forecast*predictions[M] + predictions[M]
+forecast*predictions[M+i-1] + predictions[M+i-1]
+predictions[M+i] <- forecast*predictions[M+i-1] + predictions[M+i-1]
 }
 #predictions[51]
 
@@ -195,11 +195,11 @@ predictions
 ar2predictions <- fifty
 for (i in 1:20) {
   new_level <- as.numeric(ar2predictions[-1])
-  new_lags <- as.numeric(ar2predictions[-M])
+  new_lags <- as.numeric(ar2predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(2) model 
   AR2 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2))
@@ -207,8 +207,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR2) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4]))
   # compute AR(2) forecast error 
   forecast
-  forecast*ar2predictions[M] + ar2predictions[M]
-  ar2predictions[M+i] <- forecast*ar2predictions[M] + ar2predictions[M]
+  forecast*ar2predictions[M+i-1] + ar2predictions[M+i-1]
+  ar2predictions[M+i] <- forecast*ar2predictions[M+i-1] + ar2predictions[M+i-1]
 }
 
 (ar2predictions - state$AZNQGSP)[51:70]
@@ -217,11 +217,11 @@ two <- mean(((ar2predictions - state$AZNQGSP)^2)[51:70])
 ar3predictions <- fifty
 for (i in 1:20) {
   new_level <- as.numeric(ar3predictions[-1])
-  new_lags <- as.numeric(ar3predictions[-M])
+  new_lags <- as.numeric(ar3predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(3) model 
   AR3 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3))
@@ -229,8 +229,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR3) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5]))
   # compute AR(3) forecast error 
   forecast
-  forecast*ar3predictions[M] + ar3predictions[M]
-  ar3predictions[M+i] <- forecast*ar3predictions[M] + ar3predictions[M]
+  forecast*ar3predictions[M+i-1] + ar3predictions[M+i-1]
+  ar3predictions[M+i] <- forecast*ar3predictions[M+i-1] + ar3predictions[M+i-1]
 }
 
 (ar3predictions - state$AZNQGSP)[51:70]
@@ -245,11 +245,11 @@ ar1predictions <- fifty
 
 for (i in 1:20) {
   new_level <- as.numeric(ar5predictions[-1])
-  new_lags <- as.numeric(ar5predictions[-M])
+  new_lags <- as.numeric(ar5predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(5) model 
   AR5 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3) + L(ts(new_rate_level),4) + L(ts(new_rate_level),5))
@@ -257,19 +257,19 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR5) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6],new_rate_level[M+i-7]))
   # compute AR(5) forecast error 
   forecast
-  forecast*ar5predictions[M] + ar5predictions[M]
-  ar5predictions[M+i] <- forecast*ar5predictions[M] + ar5predictions[M]
+  forecast*ar5predictions[M+i-1] + ar5predictions[M+i-1]
+  ar5predictions[M+i] <- forecast*ar5predictions[M+i-1] + ar5predictions[M+i-1]
 }
 
 (ar5predictions - state$AZNQGSP)[51:70]
 five <- mean(((ar5predictions - state$AZNQGSP)^2)[51:70])
 for (i in 1:20) {
   new_level <- as.numeric(ar6predictions[-1])
-  new_lags <- as.numeric(ar6predictions[-M])
+  new_lags <- as.numeric(ar6predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(6) model 
   AR6 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3) + L(ts(new_rate_level),4) + L(ts(new_rate_level),5) + L(ts(new_rate_level),6))
@@ -277,8 +277,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR6) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6],new_rate_level[M+i-7],new_rate_level[M+i-8]))
   # compute AR(6) forecast error 
   forecast
-  forecast*ar6predictions[M] + ar6predictions[M]
-  ar6predictions[M+i] <- forecast*ar6predictions[M] + ar6predictions[M]
+  forecast*ar6predictions[M+i-1] + ar6predictions[M+i-1]
+  ar6predictions[M+i] <- forecast*ar6predictions[M+i-1] + ar6predictions[M+i-1]
 }
 
 (ar6predictions - state$AZNQGSP)[51:70]
@@ -286,11 +286,11 @@ six <- mean(((ar6predictions - state$AZNQGSP)^2)[51:70])
 
 for (i in 1:20) {
   new_level <- as.numeric(ar8predictions[-1])
-  new_lags <- as.numeric(ar8predictions[-M])
+  new_lags <- as.numeric(ar8predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(8) model 
   AR8 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3) + L(ts(new_rate_level),4) + L(ts(new_rate_level),5) + L(ts(new_rate_level),6) + L(ts(new_rate_level),7) + L(ts(new_rate_level),8))
@@ -298,8 +298,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR8) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6],new_rate_level[M+i-7],new_rate_level[M+i-8],new_rate_level[M+i-9],new_rate_level[M+i-10]))
   # compute AR(8) forecast error 
   forecast
-  forecast*ar8predictions[M] + ar8predictions[M]
-  ar8predictions[M+i] <- forecast*ar8predictions[M] + ar8predictions[M]
+  forecast*ar8predictions[M+i-1] + ar8predictions[M+i-1]
+  ar8predictions[M+i] <- forecast*ar8predictions[M+i-1] + ar8predictions[M+i-1]
 }
 
 (ar8predictions - state$AZNQGSP)[51:70]
@@ -307,11 +307,11 @@ eight <- mean(((ar8predictions - state$AZNQGSP)^2)[51:70])
 
 for (i in 1:20) {
   new_level <- as.numeric(ar12predictions[-1])
-  new_lags <- as.numeric(ar12predictions[-M])
+  new_lags <- as.numeric(ar12predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(12) model 
   AR12 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3) + L(ts(new_rate_level),4) + L(ts(new_rate_level),5) + L(ts(new_rate_level),6) + L(ts(new_rate_level),7) + L(ts(new_rate_level),8) + L(ts(new_rate_level),9) + L(ts(new_rate_level),10) + L(ts(new_rate_level),11) + L(ts(new_rate_level),12))
@@ -319,19 +319,19 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR12) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6],new_rate_level[M+i-7],new_rate_level[M+i-8],new_rate_level[M+i-9],new_rate_level[M+i-10],new_rate_level[M+i-11],new_rate_level[M+i-12],new_rate_level[M+i-13],new_rate_level[M+i-14]))
   # compute AR(12) forecast error 
   forecast
-  forecast*ar12predictions[M] + ar12predictions[M]
-  ar12predictions[M+i] <- forecast*ar12predictions[M] + ar12predictions[M]
+  forecast*ar12predictions[M+i-1] + ar12predictions[M+i-1]
+  ar12predictions[M+i] <- forecast*ar12predictions[M+i-1] + ar12predictions[M+i-1]
 }
 
 (ar12predictions - state$AZNQGSP)[51:70]
 twelve <- mean(((ar12predictions - state$AZNQGSP)^2)[51:70])
 for (i in 1:20) {
   new_level <- as.numeric(ar16predictions[-1])
-  new_lags <- as.numeric(ar16predictions[-M])
+  new_lags <- as.numeric(ar16predictions[-(M+i-1)])
   
   newrates<- (new_level - new_lags)/new_lags
   new_rate_level <- newrates[-1]
-  new_rate_lags <- newrates[-M+i]
+  new_rate_lags <- newrates[-(M+i-1)]
   
   # estimate the AR(16) model 
   AR16 <- dynlm(ts(new_rate_level) ~ L(ts(new_rate_level)) + L(ts(new_rate_level),2) + L(ts(new_rate_level),3) + L(ts(new_rate_level),4) + L(ts(new_rate_level),5) + L(ts(new_rate_level),6) + L(ts(new_rate_level),7) + L(ts(new_rate_level),8) + L(ts(new_rate_level),9) + L(ts(new_rate_level),10) + L(ts(new_rate_level),11) + L(ts(new_rate_level),12) + L(ts(new_rate_level),13) + L(ts(new_rate_level),14) + L(ts(new_rate_level),15) + L(ts(new_rate_level),16))
@@ -339,8 +339,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR16) %*% c(1, new_rate_level[M+i-3], new_rate_level[M+i-4],new_rate_level[M+i-5],new_rate_level[M+i-6],new_rate_level[M+i-7],new_rate_level[M+i-8],new_rate_level[M+i-9],new_rate_level[M+i-10],new_rate_level[M+i-11],new_rate_level[M+i-12],new_rate_level[M+i-13],new_rate_level[M+i-14],new_rate_level[M+i-15],new_rate_level[M+i-16],new_rate_level[M+i-17],new_rate_level[M+i-18]))
   # compute AR(16) forecast error 
   forecast
-  forecast*ar16predictions[M] + ar16predictions[M]
-  ar16predictions[M+i] <- forecast*ar16predictions[M] + ar16predictions[M]
+  forecast*ar16predictions[M+i-1] + ar16predictions[M+i-1]
+  ar16predictions[M+i] <- forecast*ar16predictions[M+i-1] + ar16predictions[M+i-1]
 }
 
 (ar16predictions - state$AZNQGSP)[51:70]
@@ -359,8 +359,8 @@ for (i in 1:20) {
   forecast <- c("Quarter in question" = coef(AR1) %*% c(1, new_rate_level[M+i-3]))
   # compute AR(1) forecast error 
   forecast
-  forecast*ar1predictions[M] + ar1predictions[M]
-  ar1predictions[M+i] <- forecast*ar1predictions[M] + ar1predictions[M]
+  forecast*ar1predictions[M+i-1] + ar1predictions[M+i-1]
+  ar1predictions[M+i] <- forecast*ar1predictions[M+i-1] + ar1predictions[M+i-1]
 }
 
 (ar1predictions - state$AZNQGSP)[51:70]
