@@ -10,7 +10,7 @@ head(state)
 
 state$AZNQGSP
 plot(state$DATE,state$AZNQGSP,main='Arizona GDP',xlab='Year',ylab='GDP')
-
+N <- length(state$AZNQGSP)
 GDPGR_level <- as.numeric(state$AZNQGSP[-1])
 GDPGR_lags <- as.numeric(state$AZNQGSP[-N])
 
