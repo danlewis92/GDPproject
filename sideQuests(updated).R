@@ -72,7 +72,7 @@ for (i in 2:N) {
   constant[i] <- constant[i-1] * rate 
 }
 state[3] <-constant
-state <- rename(state, const = ...3)
+#state <- rename(state, const = ...3)
 tail(state)
 
 hybrid <- (state$const + state$ARfour)/2
@@ -106,12 +106,26 @@ for (i in 1:11) {
 }
 
 state[6] <- ar16predictions
+#state <- rename(state, AR16 = ...6)
 hybrid16 <- (state$const + state$AR16)/2
 state[7] <- hybrid16
+#state <- rename(state, hybrid16 = ...7)
 
 test_data_long_tidyr <- pivot_longer(state, cols = c("AZNQGSP", "const", "ARfour", "hybrid", "AR16", "hybrid16"))
 ggplot(data=test_data_long_tidyr, aes(x=DATE, y=value, colour=name)) + geom_point() + ggtitle("Arizona GDP") + labs(y = "Total (million $)")
 
-(state$hybrid16 - state$AZNQGSP)[61:N]
+ar4 <- mean(((state$ARfour - state$AZNQGSP)^2)[61:N])
+ar4 
+
+con <- mean(((state$const - state$AZNQGSP)^2)[61:N])
+con
+
+hyb <- mean(((state$hybrid - state$AZNQGSP)^2)[61:N])
+hyb 
+
+ar16 <- mean(((state$AR16 - state$AZNQGSP)^2)[61:N])
+ar16 
+
 hyb16 <- mean(((state$hybrid16 - state$AZNQGSP)^2)[61:N])
 hyb16
+
